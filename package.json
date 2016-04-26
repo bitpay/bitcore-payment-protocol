@@ -44,9 +44,11 @@
   "browser": "lib/browser.js",
   "dependencies": {
     "asn1.js": "=0.4.1",
-    "bitcore-lib": "^0.13.7",
     "jsrsasign": "=0.0.3",
     "protobufjs": "=3.0.0"
+  },
+  "peerDependencies": {
+    "bitcore-lib": "^0.13.7"
   },
   "devDependencies": {
     "bitcore-build": "git://github.com/bitpay/bitcore-build.git#a93a9970e3a0b3f948309730d4e4af5100dddf5a",

@@ -956,6 +956,42 @@ describe('PaymentProtocol', function() {
 
   });
 
+  describe('#x509+MixedVerify ', function () {
+      var sandbox = sinon.sandbox.create();
+      afterEach(function () {
+          sandbox.restore();
+      });
+      it('should verify PaymentRequest chain with mixed signature algorithm', function () {
+          var data = PaymentProtocol.PaymentRequest.decode(SampleRequest.agorist);
+          var pr = new PaymentProtocol();
+          pr = pr.makePaymentRequest(data);
+
+          // PaymentRequest
+          var ver = pr.get('payment_details_version');
+          var pki_type = pr.get('pki_type');
+          var pki_data = pr.get('pki_data');
+
+          pki_data = PaymentProtocol.X509Certificates.decode(pki_data);
+          pki_data = pki_data.certificate;
+
+          ver.should.equal(1);
+          pki_type.should.equal('x509+sha1');
+          pki_data.length.should.equal(2);
+
+          // Stub time before cert expiration at Mar 27 2016
+          var clock = sandbox.useFakeTimers(1459105693843);
+
+          // Verify Valid Chain
+          var trust = pr.x509Verify(true);
+          trust.selfSigned.should.equal(0);
+          trust.isChain.should.equal(true);
+          trust.caTrusted.should.equal(true);
+          trust.caName.should.equal('GeoTrust Global CA');
+          trust.chainVerified.should.equal(true);
+      });
+
+  });
+
   describe('#PEMtoDER', function() {
     it('should convert a PEM cert to DER', function() {
       var paypro = new PaymentProtocol();

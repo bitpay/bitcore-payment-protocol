@@ -1,24 +1,24 @@
-Bitcore Payment Protocol
+Bitcore-Dash Payment Protocol
 =======
 
-[![NPM Package](https://img.shields.io/npm/v/bitcore-payment-protocol.svg?style=flat-square)](https://www.npmjs.org/package/bitcore-payment-protocol)
-[![Build Status](https://img.shields.io/travis/bitpay/bitcore-payment-protocol.svg?branch=master&style=flat-square)](https://travis-ci.org/bitpay/bitcore-payment-protocol)
-[![Coverage Status](https://img.shields.io/coveralls/bitpay/bitcore-payment-protocol.svg?style=flat-square)](https://coveralls.io/r/bitpay/bitcore-payment-protocol)
+[![NPM Package](https://img.shields.io/npm/v/bitcore-payment-protocol-dash.svg?style=flat-square)](https://www.npmjs.org/package/bitcore-payment-protocol-dash)
+[![Build Status](https://img.shields.io/travis/dashpay/bitcore-payment-protocol-dash.svg?branch=master&style=flat-square)](https://travis-ci.org/dashpay/bitcore-payment-protocol-dash)
+[![Coverage Status](https://img.shields.io/coveralls/dashpay/bitcore-payment-protocol-dash.svg?style=flat-square)](https://coveralls.io/r/dashpay/bitcore-payment-protocol-dash)
 
-A module for [bitcore](https://github.com/bitpay/bitcore) that implements [Payment Protocol](https://github.com/bitcoin/bips/blob/master/bip-0070.mediawiki) and other related BIPs.
+A module for [bitcore-dash](https://github.com/dashpay/bitcore-dash) that implements [Payment Protocol](https://github.com/bitcoin/bips/blob/master/bip-0070.mediawiki) and other related BIPs.
 
 ## Getting Started
 
 This library is distributed in both the npm and bower packaging systems.
 
 ```sh
-npm install bitcore-lib
-npm install bitcore-payment-protocol
+npm install bitcore-lib-dash
+npm install bitcore-payment-protocol-dash
 ```
 
 ```sh
-bower install bitcore-lib
-bower install bitcore-payment-protocol
+bower install bitcore-lib-dash
+bower install bitcore-payment-protocol-dash
 ```
 
 There are many examples of how to use it on the developer guide [section for payment protocol](https://bitcore.io/api/paypro). For example, the following code would verify a payment request:
@@ -41,7 +41,7 @@ var verified = request.verify();
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/bitpay/bitcore/blob/master/CONTRIBUTING.md) on the main bitcore repo for information about how to contribute.
+See [CONTRIBUTING.md](https://github.com/dsahpay/bitcore-dash/blob/master/CONTRIBUTING.md) on the main bitcore-dash repo for information about how to contribute.
 
 ## License
 

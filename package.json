@@ -1,6 +1,6 @@
 {
   "name": "bitcore-payment-protocol-dash",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Payment Protocol (BIP70 and related) support for bitcore-dash",
   "author": "BitPay <dev@bitpay.com>",
   "main": "index.js",

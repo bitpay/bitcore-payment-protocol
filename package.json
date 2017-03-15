@@ -1,6 +1,6 @@
 {
   "name": "bitcore-payment-protocol",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Payment Protocol (BIP70 and related) support for bitcore",
   "author": "BitPay <dev@bitpay.com>",
   "main": "index.js",
@@ -49,7 +49,7 @@
     "protobufjs": "=5.0.1"
   },
   "devDependencies": {
-    "bitcore-build": "git://github.com/bitpay/bitcore-build.git#a93a9970e3a0b3f948309730d4e4af5100dddf5a",
+    "bitcore-build": "git://github.com/bitpay/bitcore-build.git",
     "brfs": "^1.2.0",
     "chai": "~1.10.0",
     "gulp": "^3.8.10",

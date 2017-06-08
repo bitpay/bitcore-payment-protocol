@@ -128,6 +128,13 @@ describe('PaymentProtocol', function() {
       output.message.get('amount').toInt().should.equal(20);
     });
 
+    it('should be able to get and set amount >= 2^32 through "PaymentProtocol"', function () {
+      var paypro = new PaymentProtocol();
+      paypro.makeOutput();
+      paypro.set('amount', 4294967296);
+      paypro.get('amount').should.equal(4294967296);
+    });
+
   });
 
   describe('#PaymentDetails', function() {

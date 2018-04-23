@@ -19,19 +19,19 @@ npm install dashcore-payment-protocol
 There are many examples of how to use it on the developer guide [section for payment protocol](https://bitcore.io/api/paypro). For example, the following code would verify a payment request:
 
 ```javascript
-var PaymentProtocol = require('dashcore-payment-protocol');
+const PaymentProtocol = require('dashcore-payment-protocol');
 
-var body = PaymentProtocol.PaymentRequest.decode(rawbody);
-var request = new PaymentProtocol().makePaymentRequest(body);
+const body = PaymentProtocol.PaymentRequest.decode(rawbody);
+const request = new PaymentProtocol().makePaymentRequest(body);
 
-var version = pr.get('payment_details_version');
-var pki_type = pr.get('pki_type');
-var pki_data = pr.get('pki_data');
-var serializedDetails = pr.get('serialized_payment_details');
-var signature = pr.get('signature');
+const version = pr.get('payment_details_version');
+const pki_type = pr.get('pki_type');
+const pki_data = pr.get('pki_data');
+const serializedDetails = pr.get('serialized_payment_details');
+const signature = pr.get('signature');
 
 // Verify the signature
-var verified = request.verify();
+const verified = request.verify();
 ```
 
 ## Contributing

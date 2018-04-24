@@ -1,7 +1,7 @@
 {
-  "name": "bitcore-payment-protocol-dash",
+  "name": "@dashevo/dashcore-payment-protocol",
   "version": "1.5.0",
-  "description": "Payment Protocol (BIP70 and related) support for bitcore",
+  "description": "Payment Protocol (BIP70 and related) support for dashcore",
   "author": "BitPay <dev@bitpay.com>",
   "main": "index.js",
   "scripts": {
@@ -40,12 +40,11 @@
   "keywords": [
     "dash",
     "bitcore-dash",
-    "payment protocol",
-    "BIP70"
+    "dashcore"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dashpay/bitcore-payment-protocol-dash.git"
+    "url": "https://github.com/dashevo/dashcore-payment-protocol.git"
   },
   "browser": "lib/browser.js",
   "dependencies": {

@@ -57,7 +57,7 @@
     "protobufjs": "=5.0.1"
   },
   "devDependencies": {
-    "bitcore-build-dash": "https://github.com/dashpay/bitcore-build-dash.git#0125d7646a40fcb6c1e904ca48a4f24f2dab4320",
+    "bitcore-build-dash": "https://github.com/dashevo/bitcore-build-dash.git#1437e43807d56051f4f85d5ed00d35abca8b20ca",
     "brfs": "^1.2.0",
     "chai": "~1.10.0",
     "gulp": "^3.8.10",

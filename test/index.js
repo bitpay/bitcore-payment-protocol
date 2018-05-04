@@ -4,9 +4,10 @@ var chai = require('chai');
 var sinon = require('sinon');
 var should = chai.should();
 var expect = chai.expect;
-var bitcore = require('bitcore-lib-dash');
+var bitcore = require('@dashevo/dashcore-lib');
 var PrivateKey = bitcore.PrivateKey;
 var PublicKey = bitcore.PublicKey;
+var KJUR = require('jsrsasign');
 
 var is_browser = process.browser;
 
@@ -153,6 +154,18 @@ describe('PaymentProtocol', function() {
       hex.length.should.be.greaterThan(0);
     });
 
+
+    it('should serialize with required_fee_rate', function() {
+      var obj = {};
+      var pd = new PaymentProtocol.PaymentDetails();
+      pd.set('time', 0);
+      pd.set('required_fee_rate', 110);
+      pd.set('memo', 'test memo');
+      var hex = pd.toHex();
+      hex.length.should.be.greaterThan(0);
+    });
+
+
   });
 
   describe('#PaymentRequest', function() {
@@ -220,13 +233,25 @@ describe('PaymentProtocol', function() {
       var valid = ack.isValidSize();
       valid.should.equal(true);
       var contentType = ack.getContentType();
-      contentType.should.equal(PaymentProtocol.PAYMENT_ACK_CONTENT_TYPE);
+      contentType.should.equal(PaymentProtocol.LEGACY_PAYMENT['BTC'].ACK_CONTENT_TYPE);
       var serialized = ack.serialize();
       serialized.length.should.be.greaterThan(0);
       var ack2 = new PaymentProtocol().makePaymentACK();
       ack2.deserialize(serialized, 'PaymentACK');
       var serialized2 = ack2.serialize();
       serialized.should.deep.equal(serialized2);
+    });
+
+    it('makePaymentACK BCH', function () {
+      var payment = new PaymentProtocol.Payment();
+      var ack = new PaymentProtocol().makePaymentACK(null, 'BCH');
+      ack.set('payment', payment);
+      ack.set('memo', 'this is a memo');
+      ack.get('memo').should.equal('this is a memo');
+      var valid = ack.isValidSize();
+      valid.should.equal(true);
+      var contentType = ack.getContentType();
+      contentType.should.equal(PaymentProtocol.LEGACY_PAYMENT['BCH'].ACK_CONTENT_TYPE);
     });
 
   });
@@ -274,7 +299,7 @@ describe('PaymentProtocol', function() {
       var paypro = new PaymentProtocol();
       paypro.makePayment();
       paypro.set('memo', 'test memo');
-      paypro.getContentType().should.equal('application/bitcoin-payment');
+      paypro.getContentType().should.equal('application/dash-payment');
     });
 
   });
@@ -339,7 +364,23 @@ describe('PaymentProtocol', function() {
       var buf = paypro.serializeForSig();
       var valid = paypro.isValidSize();
       var contentType = paypro.getContentType();
-      contentType.should.equal(PaymentProtocol.PAYMENT_REQUEST_CONTENT_TYPE);
+      contentType.should.equal(PaymentProtocol.LEGACY_PAYMENT['BTC'].REQUEST_CONTENT_TYPE);
+      valid.should.equal(true);
+      buf.length.should.be.greaterThan(0);
+    });
+
+    it('should serialize a BCH PaymentRequest and not fail', function() {
+      var pd = new PaymentProtocol.PaymentDetails();
+      pd.set('time', 0);
+      var pdbuf = pd.toBuffer();
+
+      var paypro = new PaymentProtocol('BCH');
+      paypro.makePaymentRequest();
+      paypro.set('serialized_payment_details', pdbuf);
+      var buf = paypro.serializeForSig();
+      var valid = paypro.isValidSize();
+      var contentType = paypro.getContentType();
+      contentType.should.equal(PaymentProtocol.LEGACY_PAYMENT['BCH'].REQUEST_CONTENT_TYPE);
       valid.should.equal(true);
       buf.length.should.be.greaterThan(0);
     });
@@ -556,8 +597,9 @@ describe('PaymentProtocol', function() {
 
   });
 
-  describe('#x509+sha256Sign', function() {
-    it('should sign assuming pki_type is x509+sha256', function() {
+  describe('#x509+sha256Sign and #x509+sha256Verify ', function() {
+
+    it('should sign and verify assuming pki_type is x509+sha256', function() {
       var pd = new PaymentProtocol.PaymentDetails();
       pd.set('time', 0);
 
@@ -581,11 +623,9 @@ describe('PaymentProtocol', function() {
 
       x509.sig2 = paypro.get('signature');
       x509.sig2.length.should.be.greaterThan(0);
-    });
-  });
 
-  describe('#x509+sha256Verify', function() {
-    it('should verify assuming pki_type is x509+sha256', function() {
+      // Verify
+      //
       var pd = new PaymentProtocol.PaymentDetails();
       pd.set('time', 0);
 
@@ -734,7 +774,7 @@ describe('PaymentProtocol', function() {
         var der = signedCert.toString('hex');
         // var pem = PaymentProtocol.DERtoPEM(der, 'CERTIFICATE');
         var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(der, 'CERTIFICATE');
-        jsrsaSig.initVerifyByCertificatePEM(pem);
+        jsrsaSig.init(pem);
         jsrsaSig.updateHex(buf.toString('hex'));
         jsrsaSig.verify(sig.toString('hex')).should.equal(true);
       } else {
@@ -792,7 +832,7 @@ describe('PaymentProtocol', function() {
     });
 
     it('should verify a real PaymentRequest without Root Cert', function() {
-      var data = PaymentProtocol.PaymentRequest.decode(SampleRequest.bitpay2);
+      var data = PaymentProtocol.PaymentRequest.decode(SampleRequest.bitpay3);
       var pr = new PaymentProtocol();
       pr = pr.makePaymentRequest(data);
 
@@ -822,7 +862,7 @@ describe('PaymentProtocol', function() {
         var der = signedCert.toString('hex');
         // var pem = PaymentProtocol.DERtoPEM(der, 'CERTIFICATE');
         var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(der, 'CERTIFICATE');
-        jsrsaSig.initVerifyByCertificatePEM(pem);
+        jsrsaSig.init(pem);
         jsrsaSig.updateHex(buf.toString('hex'));
         jsrsaSig.verify(sig.toString('hex')).should.equal(true);
       } else {
@@ -832,8 +872,13 @@ describe('PaymentProtocol', function() {
         var buf = pr.serializeForSig();
         var verifier = crypto.createVerify('RSA-' + type);
         verifier.update(buf);
-        verifier.verify(pem, sig).should.equal(true);
+
+        var verified = verifier.verify(pem, sig);
+          
+        verified.should.equal(true);
       }
+
+      var trust = pr.x509Verify(true);
 
       // Verify Signature
       var verified = pr.x509Verify();
@@ -863,12 +908,12 @@ describe('PaymentProtocol', function() {
       outputs.length.should.equal(1);
       outputs[0].amount.should.not.equal(undefined);
       outputs[0].script.should.not.equal(undefined);
-      time.should.equal(1442409238);
-      expires.should.equal(1442410138);
-      memo.should.equal('Payment request for BitPay invoice PAQtNxX7KL8BtJBnfXyTaH for merchant BitGive Foundation');
-      payment_url.should.equal('https://bitpay.com/i/PAQtNxX7KL8BtJBnfXyTaH');
+      time.should.equal(1508936331);
+      expires.should.equal(1508937231);
+      memo.should.equal('Payment request for BitPay invoice 4aKTwZemfhdmsBZATUkcaQ for merchant BitGive');
+      payment_url.should.equal('https://bitpay.com/i/4aKTwZemfhdmsBZATUkcaQ');
       var merchant_data = pd.get('merchant_data');
-      should.equal('{"invoiceId":"PAQtNxX7KL8BtJBnfXyTaH","merchantId":"TxZ5RyChmZw2isKjJWGhBc"}', merchant_data.toString());
+      should.equal('{"invoiceId":"4aKTwZemfhdmsBZATUkcaQ","merchantId":"TxZ5RyChmZw2isKjJWGhBc"}', merchant_data.toString());
     });
 
     it.skip('should verify a real PaymentRequest without Root Cert (case 2: Coinbase)', function() {
@@ -904,7 +949,7 @@ describe('PaymentProtocol', function() {
         var der = signedCert.toString('hex');
         // var pem = PaymentProtocol.DERtoPEM(der, 'CERTIFICATE');
         var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(der, 'CERTIFICATE');
-        jsrsaSig.initVerifyByCertificatePEM(pem);
+        jsrsaSig.init(pem);
         jsrsaSig.updateHex(buf.toString('hex'));
         jsrsaSig.verify(sig.toString('hex')).should.equal(true);
       } else {

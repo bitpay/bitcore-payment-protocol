@@ -5,7 +5,8 @@
   "author": "BitPay <dev@bitpay.com>",
   "main": "index.js",
   "scripts": {
-    "lint": "gulp lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "gulp test",
     "coverage": "gulp coverage",
     "build": "gulp",
@@ -60,6 +61,10 @@
     "bitcore-build-dash": "dashevo/bitcore-build-dash.git#1437e43807d56051f4f85d5ed00d35abca8b20ca",
     "brfs": "^1.2.0",
     "chai": "~1.10.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react": "^7.8.2",
     "gulp": "^3.8.10",
     "sinon": "^1.17.3"
   },

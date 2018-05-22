@@ -1,11 +1,12 @@
 {
-  "name": "bitcore-payment-protocol",
+  "name": "@dashevo/dashcore-payment-protocol",
   "version": "1.7.0",
-  "description": "Payment Protocol (BIP70 and related) support for bitcore",
+  "description": "Payment Protocol (BIP70 and related) support for dashcore",
   "author": "BitPay <dev@bitpay.com>",
   "main": "index.js",
   "scripts": {
-    "lint": "gulp lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "gulp test",
     "coverage": "gulp coverage",
     "build": "gulp",
@@ -38,29 +39,32 @@
     }
   ],
   "keywords": [
-    "bitcoin",
-    "bitcore",
-    "payment protocol",
-    "BIP70"
+    "dash",
+    "bitcore-dash",
+    "dashcore"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitpay/bitcore-payment-protocol.git"
+    "url": "https://github.com/dashevo/dashcore-payment-protocol.git"
   },
   "browser": "lib/browser.js",
   "dependencies": {
     "asn1.js": "=4.9.1",
     "asn1.js-rfc3280": "=4.0.0",
     "asn1.js-rfc5280": "=2.0.0",
-    "bitcore-lib": "^0.15.0",
+    "@dashevo/dashcore-lib": "^0.15.0",
     "bs58": "^4.0.1",
     "jsrsasign": "^8.0.4",
     "protobufjs": "=5.0.1"
   },
   "devDependencies": {
-    "bitcore-build": "https://github.com/bitpay/bitcore-build.git#d4e8b2b2f1e2c065c3a807dcb6a6250f61d67ab3",
+    "bitcore-build-dash": "dashevo/bitcore-build-dash.git#1437e43807d56051f4f85d5ed00d35abca8b20ca",
     "brfs": "^1.2.0",
     "chai": "~1.10.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react": "^7.8.2",
     "gulp": "^3.8.10",
     "sinon": "^1.17.3"
   },

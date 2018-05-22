@@ -1,10 +1,13 @@
+/* eslint-disable */
+// TODO: Remove previous line and work through linting issues at next edit.
+
 'use strict';
 
 var chai = require('chai');
 var sinon = require('sinon');
 var should = chai.should();
 var expect = chai.expect;
-var bitcore = require('bitcore-lib');
+var bitcore = require('@dashevo/dashcore-lib');
 var PrivateKey = bitcore.PrivateKey;
 var PublicKey = bitcore.PublicKey;
 var KJUR = require('jsrsasign');
@@ -299,7 +302,7 @@ describe('PaymentProtocol', function() {
       var paypro = new PaymentProtocol();
       paypro.makePayment();
       paypro.set('memo', 'test memo');
-      paypro.getContentType().should.equal('application/bitcoin-payment');
+      paypro.getContentType().should.equal('application/dash-payment');
     });
 
   });

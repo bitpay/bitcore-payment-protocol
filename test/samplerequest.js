@@ -1,3 +1,6 @@
+/* eslint-disable */
+// TODO: Remove previous line and work through linting issues at next edit.
+
 'use strict';
 
 // A test PaymentRequest (with a full cert chain) from test.bitpay.com:

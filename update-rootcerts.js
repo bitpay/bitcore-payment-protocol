@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-disable */
+// TODO: Remove previous line and work through linting issues at next edit.
+
 var fs = require('fs');
 var url = require('url');
 var http = require('http');

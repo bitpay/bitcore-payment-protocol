@@ -1,4 +1,4 @@
-node_modules/
-.git/
-.idea/
-docs/
+.idea
+node_modules
+.git
+docs
